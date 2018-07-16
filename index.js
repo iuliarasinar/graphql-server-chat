@@ -3,9 +3,13 @@ const { ApolloServer, gql } = require('apollo-server');
 const { PubSub } = require('graphql-subscriptions');
 const { withFilter } = require('graphql-subscriptions');
 const { makeExecutableSchema } = require('graphql-tools');
-
-const pubsub = new PubSub();
-pubsub.publish
+const express = require('express');
+const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const { execute, subscribe } = require('graphql');
+const { createServer } = require('http');
+const { SubscriptionServer } = require('subscriptions-transport-ws');
 
 // This is a collection of users and messages we'll be able to query
 // the GraphQL server for.  A more complete example might fetch
@@ -51,6 +55,7 @@ var getUniqueID = (function() {
         };
       })();
 
+const pubsub = new PubSub();
 
 // Type definitions define the "shape" of your data and specify
 // which ways the data can be fetched from the GraphQL server.
@@ -122,33 +127,10 @@ const resolvers = {
 
 };
 
-// // In the most basic sense, the ApolloServer can be started
-// // by passing type definitions (typeDefs) and the resolvers
-// // responsible for fetching the data for those types.
-// const server = new ApolloServer({ typeDefs, resolvers });
-
-// // This `listen` method launches a web-server.  Existing apps
-// // can utilize middleware options.
-// server.listen().then(({ url }) => {
-//   console.log(`🚀  Server ready at ${url}`);
-// });
-
-
-
-const express = require('express');
-const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const { execute, subscribe } = require('graphql');
-const { createServer } = require('http');
-const { SubscriptionServer } = require('subscriptions-transport-ws');
-
-const PORT = 3000;
+const schema = makeExecutableSchema({typeDefs, resolvers});
 const server = express();
 
-server.use('*', cors({ origin: 'http://localhost:${PORT}' }));
-
-const schema = makeExecutableSchema({typeDefs, resolvers});
+server.use('*', cors({ origin: 'http://localhost:3000' }));
 
 server.use('/graphql', bodyParser.json(), graphqlExpress({
   schema
@@ -156,13 +138,13 @@ server.use('/graphql', bodyParser.json(), graphqlExpress({
 
 server.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
-  subscriptionsEndpoint: 'ws://localhost:${PORT}/subscriptions'
+  subscriptionsEndpoint: 'ws://localhost:3000/subscriptions'
 }));
 
 // Wrap the Express server
 const ws = createServer(server);
 ws.listen(PORT, () => {
-  console.log('Apollo Server is now running on http://localhost:${PORT}');
+  console.log(" 🚀  Server ready at http://localhost:3000");
   // Set up the WebSocket for handling GraphQL subscriptions
   new SubscriptionServer({
     execute,

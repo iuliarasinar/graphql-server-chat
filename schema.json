@@ -14,11 +14,11 @@
         {
           "kind": "OBJECT",
           "name": "Query",
-          "description": "",
+          "description": null,
           "fields": [
             {
               "name": "users",
-              "description": "",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "LIST",
@@ -41,11 +41,11 @@
         {
           "kind": "OBJECT",
           "name": "User",
-          "description": "",
+          "description": null,
           "fields": [
             {
               "name": "id",
-              "description": "",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -61,7 +61,7 @@
             },
             {
               "name": "name",
-              "description": "",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -73,7 +73,7 @@
             },
             {
               "name": "email",
-              "description": "",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -85,7 +85,7 @@
             },
             {
               "name": "address",
-              "description": "",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -114,15 +114,15 @@
         {
           "kind": "OBJECT",
           "name": "Mutation",
-          "description": "",
+          "description": null,
           "fields": [
             {
               "name": "addMessage",
-              "description": "",
+              "description": null,
               "args": [
                 {
                   "name": "from",
-                  "description": "",
+                  "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -136,7 +136,7 @@
                 },
                 {
                   "name": "to",
-                  "description": "",
+                  "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -150,7 +150,7 @@
                 },
                 {
                   "name": "text",
-                  "description": "",
+                  "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -180,11 +180,11 @@
         {
           "kind": "OBJECT",
           "name": "Message",
-          "description": "",
+          "description": null,
           "fields": [
             {
               "name": "id",
-              "description": "",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -200,7 +200,7 @@
             },
             {
               "name": "from",
-              "description": "",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -216,7 +216,7 @@
             },
             {
               "name": "to",
-              "description": "",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -232,7 +232,7 @@
             },
             {
               "name": "text",
-              "description": "",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -248,7 +248,7 @@
             },
             {
               "name": "date",
-              "description": "",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -267,15 +267,15 @@
         {
           "kind": "OBJECT",
           "name": "Subscription",
-          "description": "",
+          "description": null,
           "fields": [
             {
-              "name": "messageAdded",
-              "description": "",
+              "name": "newMessage",
+              "description": null,
               "args": [
                 {
                   "name": "from",
-                  "description": "",
+                  "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -289,7 +289,7 @@
                 },
                 {
                   "name": "to",
-                  "description": "",
+                  "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -1162,16 +1162,6 @@
               "deprecationReason": null
             }
           ],
-          "possibleTypes": null
-        },
-        {
-          "kind": "SCALAR",
-          "name": "Upload",
-          "description": "The `Upload` scalar type represents a file upload promise that resolves an object containing `stream`, `filename`, `mimetype` and `encoding`.",
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": null,
           "possibleTypes": null
         }
       ],

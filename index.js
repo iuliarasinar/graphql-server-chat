@@ -27,26 +27,7 @@ function User (id, name, email, address) {
     this.address = address;
 };
 
-const messages = [
-  {
-    id: 'message1',
-    from: "user1",
-    to: "user2",
-    text: 'Hello Hermione!',
-  },
-  {
-    id: 'message2',
-    from: "user2",
-    to: "user1",
-    text: 'Hello Harry!',
-  },
-  {
-    id: 'message3',
-    from: "user3",
-    to: "user1",
-    text: 'Hello Harry from Dumbledore!',
-  },
-];
+const messages = [];
 
 var getUniqueID = (function() {
         var cntr = 0;
@@ -57,8 +38,8 @@ var getUniqueID = (function() {
 
 const pubsub = new PubSub();
 
-// Type definitions define the "shape" of your data and specify
-// which ways the data can be fetched from the GraphQL server.
+// Type definitions define the "shape" of your data and specify how 
+// it can be fetched from the GraphQL server.
 const typeDefs = gql`
   
   type User {
@@ -70,8 +51,8 @@ const typeDefs = gql`
 
  type Message {
     id: String!
-    from: String!
-    to: String!
+    from: User!
+    to: User!
     text: String!
     date: String
   }
@@ -98,7 +79,7 @@ const resolvers = {
 
   Mutation: {
     addMessage: (root, args) => {
-      const newMessage = { id: getUniqueID(), from: args.from, to: args.to, text: args.text, date: new Date()};
+      const newMessage = { id: getUniqueID(), from: new User(args.from), to: new User(args.to), text: args.text, date: new Date()};
 
       const payload = {
         newMessage: {
@@ -109,7 +90,7 @@ const resolvers = {
           date: newMessage.date
         }
       };
-
+ 	
       pubsub.publish('newMessage', payload);
 
       messages.push(newMessage);
@@ -120,17 +101,17 @@ const resolvers = {
   Subscription: {
     newMessage: {
       subscribe: withFilter(() => pubsub.asyncIterator('newMessage'), (payload, variables) => {
-        return payload.newMessage.from === variables.from;
+        return payload.newMessage.from.id === variables.from;
       }),
     }
   },
-
 };
 
 const schema = makeExecutableSchema({typeDefs, resolvers});
-const server = express();
 
-server.use('*', cors({ origin: 'http://localhost:3000' }));
+const port = 3000;
+const server = express();
+server.use('*', cors({ origin: 'http://localhost:$port' }));
 
 server.use('/graphql', bodyParser.json(), graphqlExpress({
   schema
@@ -138,13 +119,13 @@ server.use('/graphql', bodyParser.json(), graphqlExpress({
 
 server.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
-  subscriptionsEndpoint: 'ws://localhost:3000/subscriptions'
+  subscriptionsEndpoint: 'ws://localhost:$port/subscriptions'
 }));
 
 // Wrap the Express server
 const ws = createServer(server);
-ws.listen(PORT, () => {
-  console.log(" 🚀  Server ready at http://localhost:3000");
+ws.listen(port, () => {
+  console.log(" 🚀  Server ready at http://localhost:%s", port);
   // Set up the WebSocket for handling GraphQL subscriptions
   new SubscriptionServer({
     execute,
